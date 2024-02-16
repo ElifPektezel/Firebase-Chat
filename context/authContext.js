@@ -1,20 +1,29 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import { auth } from "../firebaseConfing";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const AuthContext = createContext();
-
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(undefined);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsAuthenticated(false);
-    }, 3000);
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+        setUser(user);
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    });
+    return unsub;
   }, []);
 
   const login = async (email, password) => {
     try {
-      // Giriş işlemleri 
+      // Giriş işlemleri
     } catch (e) {
       console.error("Login error:", e);
     }
@@ -22,7 +31,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      // Çıkış işlemleri 
+      // Çıkış işlemleri
     } catch (e) {
       console.error("Logout error:", e);
     }
@@ -30,7 +39,13 @@ export const AuthContextProvider = ({ children }) => {
 
   const register = async (email, password, username, profileUrl) => {
     try {
-      // Kayıt işlemleri 
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+    console.log('response.user:', response?.user);
+    //setUser(response?.user);
+    //setIsAuthenticated(true);
+    await setDoc(doc(db,"users", response?.user?.uid),{
+      
+    })
     } catch (e) {
       console.error("Register error:", e);
     }
