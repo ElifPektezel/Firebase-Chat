@@ -18,20 +18,30 @@ import { Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Loading from "../components/Loading";
 import CustomKeyboardView from "../components/CustomKeyboardView";
+import { useAuth } from "../context/authContext";
 
 export default function SignUp() {
   const router = useRouter();
+  const {register} = useAuth();
   const [loading, setLoading] = useState(false);
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const usernameRef = useRef("");
   const profileRef = useRef("");
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!emailRef.current || !passwordRef.current || !usernameRef.current || !profileRef.current) {
       Alert.alert("Sign Up", "Please fill all the fields!");
       return;
     }
+    setLoading(true);
+    let response = await register(emailRef.current, passwordRef.current, usernameRef.current, profileRef.current);
+    setLoading(false);
+    console.log('got result', response)
+    if(!response.success){
+      Alert.alert('sign up', response.msg)
+    }
+
     // register process
   };
 
@@ -40,7 +50,7 @@ export default function SignUp() {
     <View className="flex-1">
       <StatusBar style="dark" />
       <View
-        style={{ paddingTop: hp(5), paddingHorizontal: wp(5) }}
+        style={{ paddingTop: hp(7), paddingHorizontal: wp(5) }}
         className="flex-1 gap-5"
       >
         <View className="items-center" key="animation-view">
