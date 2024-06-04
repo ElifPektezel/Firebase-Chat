@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import  { createContext, useState, useEffect, useContext } from "react";
 import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "firebase/auth";
-import { auth } from "../firebaseConfing";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth } from "../firebaseConfig";
+import { doc, getDoc, setDoc,db } from "firebase/firestore";
 
 export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
@@ -38,11 +38,11 @@ export const AuthContextProvider = ({ children }) => {
     try {
       // Giriş işlemleri
       const response = await signInWithEmailAndPassword(auth,email,password);
-      return {succes: true}
+      return {success: true}
 
     } catch (e) {
       let msg = e.message;
-      if (msg.includes('(auth/invalid-email)')) msg='ınvalid email'
+      if (msg.includes('(auth/invalid-email)')) msg='invalid email'
       if (msg.includes('(auth/invalid-credential)')) msg='wrong credential'
       return {success: false, msg};
     }
@@ -51,7 +51,7 @@ export const AuthContextProvider = ({ children }) => {
   const logout = async () => {
     try {
       await signOut(auth);
-      return {succes: true}
+      return {success: true}
     } catch (e) {
       return {success:false, msg: e.message, error:e};
     }
@@ -68,10 +68,10 @@ export const AuthContextProvider = ({ children }) => {
       profileUrl,
       userId: response?.user?.uid
     });
-    return {succes: true, data: response?.user};
+    return {success: true, data: response?.user};
     } catch (e) {
       let msg = e.message;
-      if (msg.includes('(auth/invalid-email)')) msg='ınvalid email'
+      if (msg.includes('(auth/invalid-email)')) msg='invalid email'
       if (msg.includes('(auth/invalid-email-already-in-use)')) msg='This e-mail is already use'
       return {success: false, msg};
     }

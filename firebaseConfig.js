@@ -10,11 +10,16 @@ const firebaseConfig = {
   messagingSenderId: "930941731802",
   appId: "1:930941731802:web:2f39f803cc5fa1382d76e3"
 };
+
+// Firebase uygulamasını başlat
 const app = initializeApp(firebaseConfig);
+// Authentication modülünü başlat ve persistence ayarla
 export const auth = initializeAuth(app, {
     persistence: getReactNativePersistence(AsyncStorage)
 });
 
+// Firestore veritabanını başlat
 export const db = getFirestore(app);
-export const userRef = collection(db, 'users');
+// Firestore koleksiyon referansları
+export const usersRef = collection(db, 'users');
 export const roomRef = collection(db, 'rooms')
