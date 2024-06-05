@@ -1,14 +1,10 @@
-import {  Text, View } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import React from 'react'
-import { ActivityIndicator } from 'react-native'
 
-const StartPage = () => {
+export default function StartPage() {
   return (
-    <View className="flex-1 justify-center items-center">
-     <ActivityIndicator size="large" color="gray"/>
+    <View style={{ flex: 1, justifyContent: 'center' }}>
+      <ActivityIndicator size="large" color="gray" />
     </View>
   )
 }
-
-export default StartPage
-
